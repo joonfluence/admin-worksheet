@@ -1,6 +1,6 @@
 package com.pulley.freewheelin.application.worksheet.dto
 
-import com.pulley.freewheelin.application.worksheet.request.WorksheetRequestDto
+import com.pulley.freewheelin.application.worksheet.request.WorksheetCreateRequestDto
 import com.pulley.freewheelin.domain.entity.WorksheetEntity
 import org.mapstruct.Mapper
 import org.mapstruct.ReportingPolicy
@@ -13,7 +13,7 @@ data class WorksheetDto(
     val userId: Long,
 ) {
     companion object {
-        fun from(entity: WorksheetRequestDto): WorksheetDto {
+        fun from(entity: WorksheetCreateRequestDto): WorksheetDto {
             return WorksheetDtoMapper.INSTANCE.from(entity)
         }
 
@@ -30,7 +30,7 @@ data class WorksheetDto(
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 interface WorksheetDtoMapper {
-    fun from(dto: WorksheetRequestDto): WorksheetDto
+    fun from(dto: WorksheetCreateRequestDto): WorksheetDto
 
     companion object {
         val INSTANCE: WorksheetDtoMapper = Mappers.getMapper(WorksheetDtoMapper::class.java)

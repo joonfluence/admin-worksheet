@@ -1,8 +1,13 @@
 package com.pulley.freewheelin.domain.entity
 
+import com.pulley.freewheelin.application.worksheet.dto.UserWorksheetDto
+import com.pulley.freewheelin.application.worksheet.dto.WorksheetDto
 import com.pulley.freewheelin.domain.entity.base.BaseEntity
 
 import jakarta.persistence.*
+import org.mapstruct.Mapper
+import org.mapstruct.ReportingPolicy
+import org.mapstruct.factory.Mappers
 import java.time.LocalDateTime
 
 @Entity
@@ -16,4 +21,19 @@ class UserWorksheetEntity(
     val userId: Long,
     @Column(name = "worksheet_id")
     val worksheetId: Long,
-) : BaseEntity()
+) : BaseEntity() {
+    companion object {
+        fun from(dto: UserWorksheetDto): UserWorksheetEntity {
+            return UserWorksheetEntityMapper.INSTANCE.from(dto)
+        }
+    }
+}
+
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
+interface UserWorksheetEntityMapper {
+    fun from(dto: UserWorksheetDto): UserWorksheetEntity
+
+    companion object {
+        val INSTANCE: UserWorksheetEntityMapper = Mappers.getMapper(UserWorksheetEntityMapper::class.java)
+    }
+}

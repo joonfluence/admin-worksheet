@@ -54,7 +54,7 @@ class GlobalExceptionHandler {
   @ExceptionHandler(DataIntegrityViolationException::class)
   fun handleDataIntegrityViolationException(ex: DataIntegrityViolationException): ResponseEntity<Map<String, String>> {
     val errorResponse = mapOf(
-      "errorMessage" to ex.localizedMessage,
+      "errorMessage" to "데이터 무결성 제약 조건 위반",
         "statusCode" to HttpStatus.BAD_REQUEST.name)
 
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)

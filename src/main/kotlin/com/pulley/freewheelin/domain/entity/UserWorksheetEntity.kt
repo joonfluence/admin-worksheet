@@ -11,7 +11,10 @@ import org.mapstruct.factory.Mappers
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "user_worksheets")
+@Table(
+    name = "user_worksheets",
+    uniqueConstraints = [UniqueConstraint(columnNames = ["user_id", "worksheet_id"])]
+)
 class UserWorksheetEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

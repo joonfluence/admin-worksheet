@@ -14,7 +14,6 @@ class ProblemEntity(
     @Column(name = "id")
     val id: Long = 0,
     val title: String?,
-    val answer: String?,
     val description: String?,
     @Enumerated(EnumType.STRING)
     val unitCode: UnitCode,

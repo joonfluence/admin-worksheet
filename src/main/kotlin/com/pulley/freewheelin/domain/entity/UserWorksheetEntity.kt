@@ -1,21 +1,18 @@
 package com.pulley.freewheelin.domain.entity
 
-import com.pulley.freewheelin.application.worksheet.dto.UserWorksheetDto
-import com.pulley.freewheelin.application.worksheet.dto.WorksheetDto
+import com.pulley.freewheelin.application.worksheet.dto.StudentWorksheetDto
 import com.pulley.freewheelin.domain.entity.base.BaseEntity
-
 import jakarta.persistence.*
 import org.mapstruct.Mapper
 import org.mapstruct.ReportingPolicy
 import org.mapstruct.factory.Mappers
-import java.time.LocalDateTime
 
 @Entity
 @Table(
     name = "user_worksheets",
     uniqueConstraints = [UniqueConstraint(columnNames = ["user_id", "worksheet_id"])]
 )
-class UserWorksheetEntity(
+class StudentWorksheetEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -26,17 +23,17 @@ class UserWorksheetEntity(
     val worksheetId: Long,
 ) : BaseEntity() {
     companion object {
-        fun from(dto: UserWorksheetDto): UserWorksheetEntity {
-            return UserWorksheetEntityMapper.INSTANCE.from(dto)
+        fun from(dto: StudentWorksheetDto): StudentWorksheetEntity {
+            return StudentWorksheetEntityMapper.INSTANCE.from(dto)
         }
     }
 }
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-interface UserWorksheetEntityMapper {
-    fun from(dto: UserWorksheetDto): UserWorksheetEntity
+interface StudentWorksheetEntityMapper {
+    fun from(dto: StudentWorksheetDto): StudentWorksheetEntity
 
     companion object {
-        val INSTANCE: UserWorksheetEntityMapper = Mappers.getMapper(UserWorksheetEntityMapper::class.java)
+        val INSTANCE: StudentWorksheetEntityMapper = Mappers.getMapper(StudentWorksheetEntityMapper::class.java)
     }
 }

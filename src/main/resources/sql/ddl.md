@@ -54,6 +54,32 @@ CREATE TABLE IF NOT EXISTS user_worksheets
     updated_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일자',
     updated_by    VARCHAR(255) DEFAULT NULL COMMENT '수정자'
 );
+
+CREATE TABLE IF NOT EXISTS problem_correct_answers
+(
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '정답 ID',
+    problem_id  BIGINT NOT NULL COMMENT '문제 ID',
+    answer      TEXT NULL COMMENT '주관식 정답',
+    selection_id BIGINT NULL COMMENT '선택지 ID',
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일자',
+    created_by  VARCHAR(255) DEFAULT NULL COMMENT '생성자',
+    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일자',
+    updated_by  VARCHAR(255) DEFAULT NULL COMMENT '수정자'
+);
+
+CREATE TABLE IF NOT EXISTS user_problem_answers
+(
+    id                  BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '응답 ID',
+    user_id             BIGINT NOT NULL COMMENT '유저 ID',
+    problem_id          BIGINT NOT NULL COMMENT '문제 ID',
+    answer              TEXT NOT NULL COMMENT '유저 응답',
+    answer_selection_id BIGINT NOT NULL COMMENT '선택지 ID',
+    is_correct          BOOLEAN COMMENT '정답 여부',
+    created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일자',
+    created_by          VARCHAR(255) DEFAULT NULL COMMENT '생성자',
+    updated_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일자',
+    updated_by          VARCHAR(255) DEFAULT NULL COMMENT '수정자'
+);
 ```
 
 원복쿼리
@@ -63,4 +89,7 @@ DROP TABLE IF EXISTS problems;
 DROP TABLE IF EXISTS worksheets;
 DROP TABLE IF EXISTS worksheet_problems;
 DROP TABLE IF EXISTS user_worksheets;
+DROP TABLE IF EXISTS user_problem_answers;
+DROP TABLE IF EXISTS subjective_correct_answers;
+DROP TABLE IF EXISTS selection_correct_answers;
 ```

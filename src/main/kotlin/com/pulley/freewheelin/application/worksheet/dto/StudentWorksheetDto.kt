@@ -1,22 +1,22 @@
 package com.pulley.freewheelin.application.worksheet.dto
 
-import com.pulley.freewheelin.domain.entity.UserWorksheetEntity
+import com.pulley.freewheelin.domain.entity.StudentWorksheetEntity
 
-data class UserWorksheetDto (
+data class StudentWorksheetDto(
     val id: Long? = null,
     val worksheetId: Long,
     val userId: Long,
 ) {
     companion object {
-        fun from(userId: Long, worksheetId: Long): UserWorksheetDto {
-            return UserWorksheetDto(
+        fun from(userId: Long, worksheetId: Long): StudentWorksheetDto {
+            return StudentWorksheetDto(
                 worksheetId = worksheetId,
                 userId = userId,
             )
         }
 
-        fun fromEntity(entity: UserWorksheetEntity): UserWorksheetDto {
-            return UserWorksheetDto(
+        fun fromEntity(entity: StudentWorksheetEntity): StudentWorksheetDto {
+            return StudentWorksheetDto(
                 id = entity.id,
                 worksheetId = entity.worksheetId,
                 userId = entity.userId,

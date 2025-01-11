@@ -1,4 +1,4 @@
-package com.pulley.freewheelin.domain.entity.exception
+package com.pulley.freewheelin.global.exception
 
 import jakarta.validation.ConstraintViolationException
 import org.springframework.dao.DataIntegrityViolationException

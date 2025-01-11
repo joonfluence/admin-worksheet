@@ -9,10 +9,11 @@ CREATE SCHEMA pulley;
 CREATE TABLE IF NOT EXISTS problems
 (
     id        BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '문제 ID',
+    title         VARCHAR(255) NOT NULL COMMENT '문제 제목',
+    answer        VARCHAR(255) NOT NULL COMMENT '문제 정답',
     unit_code VARCHAR(20)  NOT NULL COMMENT '유형 정보',
     level     INT          NOT NULL COMMENT '난이도',
     type      VARCHAR(20)  NOT NULL COMMENT '문제 유형',
-    answer    VARCHAR(255) NOT NULL COMMENT '정답',
     created_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일자',
     created_by    VARCHAR(255) DEFAULT NULL COMMENT '생성자',
     updated_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일자',

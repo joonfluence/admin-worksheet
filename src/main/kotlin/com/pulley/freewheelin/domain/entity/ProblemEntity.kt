@@ -1,6 +1,10 @@
 package com.pulley.freewheelin.domain.entity
 
+import com.pulley.freewheelin.domain.entity.base.BaseEntity
+import com.pulley.freewheelin.domain.enums.ProblemType
+import com.pulley.freewheelin.domain.enums.UnitCode
 import jakarta.persistence.*
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "problems")
@@ -9,8 +13,12 @@ class ProblemEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     val id: Long = 0,
-    val unitCode: String,
+    val title: String?,
+    val answer: String?,
+    val description: String?,
+    @Enumerated(EnumType.STRING)
+    val unitCode: UnitCode,
     val level: Int,
-    val type: String,
-    val answer: String
-)
+    @Enumerated(EnumType.STRING)
+    val type: ProblemType,
+) : BaseEntity()

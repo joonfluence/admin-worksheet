@@ -1,16 +1,18 @@
 package com.pulley.freewheelin.application.problem.dto
 
 import com.pulley.freewheelin.domain.entity.ProblemEntity
+import com.pulley.freewheelin.domain.enums.ProblemType
+import com.pulley.freewheelin.domain.enums.UnitCode
 import org.mapstruct.Mapper
+import org.mapstruct.Mapping
 import org.mapstruct.ReportingPolicy
 import org.mapstruct.factory.Mappers
 
 data class ProblemDto(
     val id: Long,
-    val answer: String,
-    val unitCode: String,
+    val unitCode: UnitCode,
     val level: Int,
-    val problemType: String,
+    val problemType: ProblemType,
 ) {
     companion object {
         fun from(entity: ProblemEntity): ProblemDto {
@@ -21,6 +23,7 @@ data class ProblemDto(
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 interface ProblemDtoMapper {
+    @Mapping(target = "problemType", source = "type")
     fun from(entity: ProblemEntity): ProblemDto
 
     companion object {

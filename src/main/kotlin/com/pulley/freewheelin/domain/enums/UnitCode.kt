@@ -7,6 +7,7 @@ enum class UnitCode {
     UC1583,
     UC1584,
     UC1576,
+    UC1577,
     UC1523,
     UC1578,
     UC1579,

@@ -1,5 +1,6 @@
 package com.pulley.freewheelin.application.worksheet.controller
 
+import com.pulley.freewheelin.application.worksheet.response.WorksheetAnalysisResponse
 import com.pulley.freewheelin.application.worksheet.response.WorksheetProblemResponse
 import com.pulley.freewheelin.application.worksheet.service.WorksheetQueryService
 import org.springframework.http.ResponseEntity
@@ -19,5 +20,13 @@ class WorksheetQueryController(private val worksheetQueryService: WorksheetQuery
         val problems = worksheetQueryService.findByWorksheetId(worksheetId)
         val responses = problems.map { WorksheetProblemResponse.from(it) }
         return ResponseEntity.ok(responses)
+    }
+
+    @GetMapping("/{worksheetId}/analyze")
+    fun findWorksheetAnalysisById(
+        @PathVariable worksheetId: Long,
+    ): ResponseEntity<WorksheetAnalysisResponse> {
+        val analysis = worksheetQueryService.findAnalysisByWorksheetId(worksheetId)
+        return ResponseEntity.ok(WorksheetAnalysisResponse.from(analysis))
     }
 }

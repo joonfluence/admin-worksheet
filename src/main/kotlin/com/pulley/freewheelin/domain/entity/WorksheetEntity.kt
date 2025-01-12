@@ -27,6 +27,18 @@ class WorksheetEntity (
     val userId: Long,
 ) : BaseEntity() {
     companion object {
+        fun of(
+            title: String,
+            description: String?,
+            userId: Long,
+        ): WorksheetEntity {
+            return WorksheetEntity(
+                title = title,
+                description = description,
+                userId = userId,
+            )
+        }
+
         fun from(dto: WorksheetDto): WorksheetEntity {
             return WorksheetEntityMapper.INSTANCE.from(dto)
         }

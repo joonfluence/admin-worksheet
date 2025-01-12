@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class StudentWorksheetCommandService(
     private val problemCorrectAnswerRepository: ProblemCorrectAnswerRepository,
-    private val userProblemAnswerRepository: StudentProblemAnswerRepository,
+    private val studentProblemAnswerRepository: StudentProblemAnswerRepository,
     private val studentWorksheetRepository: StudentWorksheetRepository,
     private val problemRepository: ProblemRepository,
     private val worksheetRepository: WorksheetRepository,
@@ -60,10 +60,10 @@ class StudentWorksheetCommandService(
                 }
             )
 
-            StudentProblemAnswerEntity.from(gradingDto, request.userId, isCorrect)
+            StudentProblemAnswerEntity.of(gradingDto, request.userId, isCorrect)
         }
 
-        val entities = userProblemAnswerRepository.saveAll(userProblemAnswers)
+        val entities = studentProblemAnswerRepository.saveAll(userProblemAnswers)
         return entities.map { StudentProblemAnswerDto.from(it) }
     }
 

@@ -35,16 +35,16 @@ class StudentProblemAnswerEntity(
     val isCorrect: Boolean,
 ) : BaseEntity() {
     companion object {
-        fun from(
+        fun of(
             dto: StudentProblemAnswerDto,
             userId: Long,
             isCorrect: Boolean,
         ): StudentProblemAnswerEntity {
             return StudentProblemAnswerEntity(
-                userId = userId,
                 problemId = dto.problemId,
                 answer = dto.answer,
                 answerSelectionId = dto.answerSelectionId,
+                userId = userId,
                 isCorrect = isCorrect,
             )
         }

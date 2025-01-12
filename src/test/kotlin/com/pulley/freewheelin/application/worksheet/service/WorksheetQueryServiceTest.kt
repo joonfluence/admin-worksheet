@@ -1,5 +1,6 @@
 package com.pulley.freewheelin.application.worksheet.service
 
+import com.pulley.freewheelin.application.SpringBootBaseIntegrationTest
 import com.pulley.freewheelin.application.worksheet.dto.StudentWorksheetDto
 import com.pulley.freewheelin.application.worksheet.dto.WorksheetAnalysisDto
 import com.pulley.freewheelin.application.worksheet.dto.WorksheetDto
@@ -16,16 +17,9 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.junit.jupiter.SpringExtension
-import org.springframework.transaction.annotation.Transactional
 
-@ExtendWith(SpringExtension::class)
-@SpringBootTest
-@Transactional
-class WorksheetQueryServiceIntegrationTest {
+class WorksheetQueryServiceIntegrationTest : SpringBootBaseIntegrationTest() {
 
     @Autowired
     private lateinit var worksheetQueryService: WorksheetQueryService

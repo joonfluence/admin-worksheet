@@ -20,4 +20,20 @@ class ProblemEntity(
     val level: Int,
     @Enumerated(EnumType.STRING)
     val type: ProblemType,
-) : BaseEntity()
+) : BaseEntity() {
+    companion object {
+        fun of(
+            unitCode: UnitCode,
+            level: Int,
+            type: ProblemType,
+            title: String?,
+            description: String?,
+        ) = ProblemEntity(
+            unitCode = unitCode,
+            level = level,
+            type = type,
+            title = title,
+            description = description,
+        )
+    }
+}

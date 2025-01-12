@@ -1,8 +1,12 @@
 package com.pulley.freewheelin.domain.entity
 
 import com.pulley.freewheelin.domain.entity.base.BaseEntity
-import jakarta.persistence.*
-import java.time.LocalDateTime
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Table
+import jakarta.persistence.UniqueConstraint
 
 @Entity
 @Table(
@@ -12,12 +16,7 @@ import java.time.LocalDateTime
 class WorksheetProblemEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     val id: Long = 0,
-
-    @Column(name = "worksheet_id", nullable = false)
     val worksheetId: Long,
-
-    @Column(name = "problem_id", nullable = false)
     val problemId: Long,
 ) : BaseEntity()

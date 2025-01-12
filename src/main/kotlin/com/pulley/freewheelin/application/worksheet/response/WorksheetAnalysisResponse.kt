@@ -5,7 +5,7 @@ import org.mapstruct.Mapper
 import org.mapstruct.ReportingPolicy
 import org.mapstruct.factory.Mappers
 
-data class WorksheetAnalysisResponse (
+data class WorksheetAnalysisResponse(
     val worksheetId: Long,
     val worksheetName: String,
     val students: List<WorksheetAnalysisStudentResponse>,

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageImpl
 
-class ProblemQueryServiceIntegrationTest: SpringBootBaseIntegrationTest() {
+class ProblemQueryServiceIntegrationTest : SpringBootBaseIntegrationTest() {
 
     @Autowired
     private lateinit var problemQueryService: ProblemQueryService
@@ -144,23 +144,27 @@ class ProblemQueryServiceIntegrationTest: SpringBootBaseIntegrationTest() {
         val problems = mutableListOf<ProblemEntity>()
 
         repeat(subjectiveCount) {
-            problems.add(ProblemEntity.of(
-                title = "주관식 문제 ${it + 1}",
-                description = "주관식 설명 ${it + 1}",
-                unitCode = unitCode,
-                level = level,
-                type = ProblemType.SUBJECTIVE
-            ))
+            problems.add(
+                ProblemEntity.of(
+                    title = "주관식 문제 ${it + 1}",
+                    description = "주관식 설명 ${it + 1}",
+                    unitCode = unitCode,
+                    level = level,
+                    type = ProblemType.SUBJECTIVE
+                )
+            )
         }
 
         repeat(selectionCount) {
-            problems.add(ProblemEntity.of(
-                title = "객관식 문제 ${it + 1}",
-                description = "객관식 설명 ${it + 1}",
-                unitCode = unitCode,
-                level = level,
-                type = ProblemType.SELECTION
-            ))
+            problems.add(
+                ProblemEntity.of(
+                    title = "객관식 문제 ${it + 1}",
+                    description = "객관식 설명 ${it + 1}",
+                    unitCode = unitCode,
+                    level = level,
+                    type = ProblemType.SELECTION
+                )
+            )
         }
 
         problemRepository.saveAll(problems)

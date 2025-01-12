@@ -39,7 +39,7 @@ class ProblemRepositoryCustomImpl : ProblemRepositoryCustom, QuerydslRepositoryS
             val remainingProblems = dto.totalCount - totalResults.size
             val additionalResults = problems.filter {
                 DifficultyLevel.fromLevel(it.level) != dto.level &&
-                        !totalResults.contains(it)
+                    !totalResults.contains(it)
             }.take(remainingProblems)
             return PageImpl(totalResults + additionalResults)
         }

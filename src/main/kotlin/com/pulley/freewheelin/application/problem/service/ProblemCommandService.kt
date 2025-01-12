@@ -5,5 +5,4 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
-class ProblemCommandService {
-}
+class ProblemCommandService

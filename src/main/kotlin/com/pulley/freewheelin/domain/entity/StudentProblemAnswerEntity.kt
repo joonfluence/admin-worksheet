@@ -1,7 +1,6 @@
 package com.pulley.freewheelin.domain.entity
 
 import com.pulley.freewheelin.application.worksheet.request.StudentProblemAnswerDto
-import com.pulley.freewheelin.application.worksheet.request.StudentProblemGradingRequestDto
 import com.pulley.freewheelin.domain.entity.base.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

@@ -4,7 +4,7 @@ import com.pulley.freewheelin.domain.enums.DifficultyLevel
 import com.pulley.freewheelin.domain.enums.ProblemType
 import io.swagger.v3.oas.annotations.media.Schema
 
-data class ProblemSearchDto (
+data class ProblemSearchDto(
     @Schema(description = "최대 문제 수")
     var totalCount: Int = 0,
     @Schema(description = "단위 코드 리스트")

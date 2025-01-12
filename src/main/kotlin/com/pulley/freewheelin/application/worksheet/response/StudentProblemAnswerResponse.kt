@@ -12,7 +12,7 @@ data class StudentProblemAnswerResponse(
     val answer: String?,
     val answerSelectionId: Long?,
     val isCorrect: Boolean,
-)   {
+) {
     companion object {
         fun from(entity: StudentProblemAnswerDto): StudentProblemAnswerResponse {
             return UserProblemAnswerResponseMapper.INSTANCE.from(entity)

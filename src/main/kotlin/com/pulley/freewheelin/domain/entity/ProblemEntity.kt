@@ -3,15 +3,19 @@ package com.pulley.freewheelin.domain.entity
 import com.pulley.freewheelin.domain.entity.base.BaseEntity
 import com.pulley.freewheelin.domain.enums.ProblemType
 import com.pulley.freewheelin.domain.enums.UnitCode
-import jakarta.persistence.*
-import java.time.LocalDateTime
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 
 @Entity
 @Table(name = "problems")
 class ProblemEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     val id: Long = 0,
     val title: String?,
     val description: String?,

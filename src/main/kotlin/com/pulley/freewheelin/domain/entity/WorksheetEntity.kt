@@ -1,8 +1,6 @@
 package com.pulley.freewheelin.domain.entity
 
 import com.pulley.freewheelin.application.worksheet.dto.WorksheetDto
-import com.pulley.freewheelin.application.worksheet.dto.WorksheetProblemDto
-import com.pulley.freewheelin.application.worksheet.response.WorksheetProblemResponse
 import com.pulley.freewheelin.domain.entity.base.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -13,11 +11,10 @@ import jakarta.persistence.Table
 import org.mapstruct.Mapper
 import org.mapstruct.ReportingPolicy
 import org.mapstruct.factory.Mappers
-import org.springframework.context.annotation.Description
 
 @Entity
 @Table(name = "worksheets")
-class WorksheetEntity (
+class WorksheetEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

@@ -10,7 +10,7 @@ data class WorksheetResponse(
     val title: String,
     val description: String?,
     val userId: Long,
-){
+) {
     companion object {
         fun from(dto: WorksheetDto): WorksheetResponse {
             return WorksheetResponseMapper.INSTANCE.from(dto)

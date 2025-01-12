@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class PulleyApplication
 
 fun main(args: Array<String>) {
-  runApplication<PulleyApplication>(*args)
+    runApplication<PulleyApplication>(*args)
 }

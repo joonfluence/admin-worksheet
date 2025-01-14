@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/v1/worksheets")
-class WorksheetQueryController(private val worksheetQueryService: WorksheetQueryService) {
-
+class WorksheetQueryController(
+    private val worksheetQueryService: WorksheetQueryService
+) {
     @Operation(summary = "학습지 문제 조회")
     @GetMapping("/{worksheetId}/problems")
     fun findProblemsByWorksheetId(

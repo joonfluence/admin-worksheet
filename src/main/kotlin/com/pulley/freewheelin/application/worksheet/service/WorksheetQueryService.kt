@@ -33,16 +33,18 @@ class WorksheetQueryService(
 
         val problemIds = problems.map { it.id }
         val studentAnswers = studentProblemAnswerRepository.findByProblemIdIn(problemIds)
+        val studentAnswerUserMap = studentAnswers.groupBy { it.userId }
+        val studentAnswerProblemMap = studentAnswers.groupBy { it.problemId }
 
         val studentDtos = students.map { student ->
-            val answers = studentAnswers.filter { it.userId == student.userId }
+            val answers = studentAnswerUserMap[student.userId] ?: emptyList()
             val correctAnswers = answers.count { it.isCorrect }
             val accuracyRate = if (answers.isNotEmpty()) correctAnswers.toDouble() / answers.size else 0.0
             WorksheetAnalysisStudentDto.of(student.userId, accuracyRate)
         }
 
         val problemAccuracyRates = problems.map { problem ->
-            val answers = studentAnswers.filter { it.problemId == problem.id }
+            val answers = studentAnswerProblemMap[problem.id] ?: emptyList()
             val correctAnswers = answers.count { it.isCorrect }
             val accuracyRate = if (answers.isNotEmpty()) correctAnswers.toDouble() / answers.size else 0.0
             WorksheetProblemDetailDto.of(problem.problemId, accuracyRate)

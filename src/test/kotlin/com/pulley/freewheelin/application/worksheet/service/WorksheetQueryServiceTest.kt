@@ -1,6 +1,6 @@
 package com.pulley.freewheelin.application.worksheet.service
 
-import com.pulley.freewheelin.application.SpringBootBaseIntegrationTest
+import com.pulley.freewheelin.application.BaseJpaTest
 import com.pulley.freewheelin.application.worksheet.dto.StudentWorksheetDto
 import com.pulley.freewheelin.application.worksheet.dto.WorksheetAnalysisDto
 import com.pulley.freewheelin.application.worksheet.dto.WorksheetDto
@@ -26,11 +26,9 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
+import kotlin.test.BeforeTest
 
-class WorksheetQueryServiceIntegrationTest : SpringBootBaseIntegrationTest() {
-
-    @Autowired
-    private lateinit var worksheetQueryService: WorksheetQueryService
+class WorksheetQueryServiceTest : BaseJpaTest() {
 
     @Autowired
     private lateinit var worksheetRepository: WorksheetRepository
@@ -46,9 +44,20 @@ class WorksheetQueryServiceIntegrationTest : SpringBootBaseIntegrationTest() {
 
     @Autowired
     private lateinit var userRepository: UserRepository
+    private lateinit var worksheetQueryService: WorksheetQueryService
+
+    @BeforeTest
+    fun setUp() {
+        worksheetQueryService = WorksheetQueryService(
+            worksheetRepository = worksheetRepository,
+            worksheetProblemRepository = worksheetProblemRepository,
+            studentWorksheetRepository = studentWorksheetRepository,
+            studentProblemAnswerRepository = studentProblemAnswerRepository
+        )
+    }
 
     @BeforeEach
-    fun setUp() {
+    fun init() {
         val student = createUser("이준호", "joonfluence.dev@gmail.com", UserType.STUDENT)
         val worksheet = createWorksheet("샘플 시험지", "샘플 시험지 입니다.", student.id)
         val problems = createProblems(worksheet.id, listOf(1L, 2L))

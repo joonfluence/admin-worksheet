@@ -68,13 +68,13 @@ class StudentWorksheetCommandService(
 
     private fun validateWorksheet(worksheetId: Long) {
         worksheetRepository.existsById(worksheetId).takeIf { it }
-            ?: throw BadRequestException("학습지가 존재하지 않습니다")
+            ?: throw BadRequestException("학습지가 존재하지 않습니다.")
     }
 
     private fun validateProblems(problemIds: List<Long>) {
         val entities = problemRepository.findByIdIn(problemIds)
         if (entities.size != problemIds.size) {
-            throw BadRequestException("문제 정보가 올바르지 않습니다")
+            throw BadRequestException("존재하지 않은 문제들이 포함되어 있습니다.")
         }
     }
 }

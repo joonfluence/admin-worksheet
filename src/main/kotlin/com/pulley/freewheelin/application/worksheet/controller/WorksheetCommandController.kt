@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/v1/worksheets")
-class WorksheetCommandController(private val worksheetCommandService: WorksheetCommandService) {
-
+class WorksheetCommandController(
+    private val worksheetCommandService: WorksheetCommandService
+) {
     @PostMapping
     @Operation(summary = "학습지 생성")
     fun saveWorksheet(

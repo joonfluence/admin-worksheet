@@ -11,4 +11,10 @@ data class WorksheetCreateRequestDto(
     val description: String? = null,
     @Schema(description = "사용자 Id")
     val userId: Long,
-)
+) {
+    companion object {
+        fun of(title: String, description: String?, userId: Long): WorksheetCreateRequestDto {
+            return WorksheetCreateRequestDto(title, description, userId)
+        }
+    }
+}

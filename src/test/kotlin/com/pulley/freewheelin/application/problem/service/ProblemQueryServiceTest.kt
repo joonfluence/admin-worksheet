@@ -1,6 +1,6 @@
 package com.pulley.freewheelin.application.problem.service
 
-import com.pulley.freewheelin.application.SpringBootBaseIntegrationTest
+import com.pulley.freewheelin.application.BaseJpaTest
 import com.pulley.freewheelin.application.problem.dto.ProblemDto
 import com.pulley.freewheelin.application.problem.dto.ProblemSearchDto
 import com.pulley.freewheelin.domain.entity.ProblemEntity
@@ -14,14 +14,18 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageImpl
+import kotlin.test.BeforeTest
 
-class ProblemQueryServiceIntegrationTest : SpringBootBaseIntegrationTest() {
-
-    @Autowired
-    private lateinit var problemQueryService: ProblemQueryService
+class ProblemQueryServiceTest : BaseJpaTest() {
 
     @Autowired
     private lateinit var problemRepository: ProblemRepository
+    private lateinit var problemQueryService: ProblemQueryService
+
+    @BeforeTest
+    fun setUp() {
+        problemQueryService = ProblemQueryService(problemRepository)
+    }
 
     @Nested
     @DisplayName("문제 조회 테스트")
@@ -42,7 +46,6 @@ class ProblemQueryServiceIntegrationTest : SpringBootBaseIntegrationTest() {
                 totalCount = 10,
             )
             val result: PageImpl<ProblemDto> = problemQueryService.findAllProblems(searchDto)
-
             assertEquals(subjectiveCount.toLong(), result.totalElements)
         }
 

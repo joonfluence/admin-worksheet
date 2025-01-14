@@ -5,6 +5,7 @@ import com.pulley.freewheelin.application.worksheet.request.StudentProblemGradin
 import com.pulley.freewheelin.application.worksheet.request.StudentWorksheetCreateRequestDto
 import com.pulley.freewheelin.application.worksheet.response.StudentProblemAnswerResponse
 import com.pulley.freewheelin.application.worksheet.response.StudentWorksheetResponse
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/users/worksheets")
 class StudentWorksheetCommandController(private val userWorksheetCommandService: StudentWorksheetCommandService) {
 
+    @Operation(summary = "유저 학습지 출제")
     @PostMapping("/{worksheetId}")
     fun saveUserWorksheet(
         @PathVariable worksheetId: Long,
@@ -27,6 +29,7 @@ class StudentWorksheetCommandController(private val userWorksheetCommandService:
         return ResponseEntity.ok(responses)
     }
 
+    @Operation(summary = "유저 학습지 채점")
     @PutMapping("/{worksheetId}/problems/grade")
     fun gradeUserWorksheet(
         @PathVariable worksheetId: Long,

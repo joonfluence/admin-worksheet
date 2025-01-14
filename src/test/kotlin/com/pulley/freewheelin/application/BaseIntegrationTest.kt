@@ -8,4 +8,4 @@ import org.springframework.transaction.annotation.Transactional
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @Transactional
-class SpringBootBaseIntegrationTest
+class BaseIntegrationTest

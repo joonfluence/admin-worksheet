@@ -17,7 +17,9 @@ CREATE TABLE IF NOT EXISTS problems
     created_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일자',
     created_by    VARCHAR(255) DEFAULT NULL COMMENT '생성자',
     updated_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일자',
-    updated_by    VARCHAR(255) DEFAULT NULL COMMENT '수정자'
+    updated_by    VARCHAR(255) DEFAULT NULL COMMENT '수정자',
+    INDEX idx_unit_code (unit_code),
+    INDEX idx_level_type (level, type)
 );
 
 CREATE TABLE IF NOT EXISTS worksheets
@@ -29,7 +31,8 @@ CREATE TABLE IF NOT EXISTS worksheets
     created_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일자',
     created_by    VARCHAR(255) DEFAULT NULL COMMENT '생성자',
     updated_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일자',
-    updated_by    VARCHAR(255) DEFAULT NULL COMMENT '수정자'
+    updated_by    VARCHAR(255) DEFAULT NULL COMMENT '수정자',
+    INDEX idx_user_id (user_id)
 );
 
 CREATE TABLE IF NOT EXISTS worksheet_problems
@@ -41,7 +44,9 @@ CREATE TABLE IF NOT EXISTS worksheet_problems
     created_by    VARCHAR(255) DEFAULT NULL COMMENT '생성자',
     updated_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일자',
     updated_by    VARCHAR(255) DEFAULT NULL COMMENT '수정자',
-    UNIQUE KEY unique_worksheet_problem (worksheet_id, problem_id)
+    UNIQUE KEY unique_worksheet_problem (worksheet_id, problem_id),
+    INDEX idx_worksheet_id (worksheet_id),
+    INDEX idx_problem_id (problem_id)
 );
 
 CREATE TABLE IF NOT EXISTS user_worksheets
@@ -52,7 +57,8 @@ CREATE TABLE IF NOT EXISTS user_worksheets
     created_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일자',
     created_by    VARCHAR(255) DEFAULT NULL COMMENT '생성자',
     updated_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일자',
-    updated_by    VARCHAR(255) DEFAULT NULL COMMENT '수정자'
+    updated_by    VARCHAR(255) DEFAULT NULL COMMENT '수정자',
+    INDEX idx_user_id_worksheet (user_id, worksheet_id)
 );
 
 CREATE TABLE IF NOT EXISTS problem_correct_answers
@@ -64,7 +70,9 @@ CREATE TABLE IF NOT EXISTS problem_correct_answers
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일자',
     created_by  VARCHAR(255) DEFAULT NULL COMMENT '생성자',
     updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일자',
-    updated_by  VARCHAR(255) DEFAULT NULL COMMENT '수정자'
+    updated_by  VARCHAR(255) DEFAULT NULL COMMENT '수정자',
+    INDEX idx_problem_id (problem_id),
+    INDEX idx_selection_id (selection_id)
 );
 
 CREATE TABLE IF NOT EXISTS user_problem_answers
@@ -78,7 +86,10 @@ CREATE TABLE IF NOT EXISTS user_problem_answers
     created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일자',
     created_by          VARCHAR(255) DEFAULT NULL COMMENT '생성자',
     updated_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일자',
-    updated_by          VARCHAR(255) DEFAULT NULL COMMENT '수정자'
+    updated_by          VARCHAR(255) DEFAULT NULL COMMENT '수정자',
+    INDEX idx_problem_id (problem_id),
+    INDEX idx_selection_id (answer_selection_id),
+    INDEX idx_user_id (user_id)
 );
 ```
 

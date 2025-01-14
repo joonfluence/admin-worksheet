@@ -7,6 +7,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.Index
 import jakarta.persistence.Table
 
 @Entity
@@ -20,6 +21,11 @@ import jakarta.persistence.Table
             columnNames = ["user_id", "problem_id", "answer"],
             name = "user_problem_answers_user_id_problem_id_answer_unique"
         )
+    ],
+    indexes = [
+        Index(name = "idx_user_id", columnList = "user_id"),
+        Index(name = "idx_problem_id", columnList = "problem_id"),
+        Index(name = "idx_answer_selection_id", columnList = "answer_selection_id"),
     ]
 )
 class StudentProblemAnswerEntity(

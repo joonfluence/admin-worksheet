@@ -7,6 +7,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.Index
 import jakarta.persistence.Table
 import jakarta.persistence.UniqueConstraint
 import org.mapstruct.Mapper
@@ -16,7 +17,10 @@ import org.mapstruct.factory.Mappers
 @Entity
 @Table(
     name = "user_worksheets",
-    uniqueConstraints = [UniqueConstraint(columnNames = ["user_id", "worksheet_id"])]
+    uniqueConstraints = [UniqueConstraint(columnNames = ["user_id", "worksheet_id"])],
+    indexes = [
+        Index(name = "idx_user_id_worksheet", columnList = "user_id, worksheet_id")
+    ]
 )
 class StudentWorksheetEntity(
     @Id

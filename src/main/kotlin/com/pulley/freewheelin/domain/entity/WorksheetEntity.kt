@@ -7,13 +7,16 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.Index
 import jakarta.persistence.Table
 import org.mapstruct.Mapper
 import org.mapstruct.ReportingPolicy
 import org.mapstruct.factory.Mappers
 
 @Entity
-@Table(name = "worksheets")
+@Table(name = "worksheets", indexes = [
+    Index(name = "idx_user_id", columnList = "user_id")
+])
 class WorksheetEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

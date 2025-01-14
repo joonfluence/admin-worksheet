@@ -101,8 +101,9 @@ class StudentWorksheetCommandServiceTest : BaseJpaTest() {
                 ),
             )
         )
-        createProblems(UnitCode.UC1503, 1, 3, 0)
-        createCorrectAnswers(listOf(1L, 2L, 3L), true)
+        val problems = createProblems(UnitCode.UC1503, 1, 3, 0)
+        val problemIds = problems.map { it?.id ?: 0 }
+        createCorrectAnswers(problemIds, true)
 
         // When
         val result = studentWorksheetCommandService.gradeUserWorksheet(worksheetEntity.id, request)
@@ -145,8 +146,9 @@ class StudentWorksheetCommandServiceTest : BaseJpaTest() {
                 ),
             )
         )
-        createProblems(UnitCode.UC1503, 1, 0, 3)
-        createCorrectAnswers(listOf(4L, 5L, 6L), false)
+        val problems = createProblems(UnitCode.UC1503, 1, 0, 3)
+        val problemIds = problems.map { it?.id ?: 0 }
+        createCorrectAnswers(problemIds, false)
 
         // When
         val result = studentWorksheetCommandService.gradeUserWorksheet(worksheetEntity.id, request)
@@ -179,7 +181,7 @@ class StudentWorksheetCommandServiceTest : BaseJpaTest() {
         }
     }
 
-    fun createProblems(unitCode: UnitCode, level: Int, subjectiveCount: Int, selectionCount: Int) {
+    fun createProblems(unitCode: UnitCode, level: Int, subjectiveCount: Int, selectionCount: Int): List<ProblemEntity?> {
         val problems = mutableListOf<ProblemEntity>()
 
         repeat(subjectiveCount) {
@@ -206,6 +208,6 @@ class StudentWorksheetCommandServiceTest : BaseJpaTest() {
             )
         }
 
-        problemRepository.saveAll(problems)
+        return problemRepository.saveAll(problems)
     }
 }

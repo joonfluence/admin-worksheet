@@ -2,8 +2,11 @@ package com.pulley.freewheelin.application.students.service
 
 import com.pulley.freewheelin.application.worksheet.dto.StudentProblemAnswerDto
 import com.pulley.freewheelin.application.worksheet.dto.StudentWorksheetDto
-import com.pulley.freewheelin.application.worksheet.request.StudentProblemGradingRequestDto
-import com.pulley.freewheelin.application.worksheet.request.StudentWorksheetCreateRequestDto
+import com.pulley.freewheelin.application.worksheet.request.StudentProblemAnswerRequest
+import com.pulley.freewheelin.application.worksheet.request.StudentProblemGradingRequest
+import com.pulley.freewheelin.application.worksheet.request.StudentProblemSelectiveAnswerDto
+import com.pulley.freewheelin.application.worksheet.request.StudentProblemSubjectiveAnswerDto
+import com.pulley.freewheelin.application.worksheet.request.StudentWorksheetCreateRequest
 import com.pulley.freewheelin.domain.entity.StudentProblemAnswerEntity
 import com.pulley.freewheelin.domain.entity.StudentWorksheetEntity
 import com.pulley.freewheelin.domain.repository.ProblemCorrectAnswerRepository
@@ -27,7 +30,10 @@ class StudentWorksheetCommandService(
 ) {
 
     @DistributedLock(lockKey = "save_user_worksheet", keyParameter = "worksheetId")
-    fun saveUserWorksheet(worksheetId: Long, request: StudentWorksheetCreateRequestDto): List<StudentWorksheetDto> {
+    fun saveUserWorksheet(
+        worksheetId: Long,
+        request: StudentWorksheetCreateRequest
+    ): List<StudentWorksheetDto> {
         validateWorksheet(worksheetId)
         val dtos = request.userIds.map { StudentWorksheetDto.from(it, worksheetId) }
         val worksheets = dtos.map { StudentWorksheetEntity.from(it) }
@@ -38,35 +44,50 @@ class StudentWorksheetCommandService(
     @DistributedLock(lockKey = "grade_user_worksheet", keyParameter = "worksheetId")
     fun gradeUserWorksheet(
         worksheetId: Long,
-        request: StudentProblemGradingRequestDto
+        request: StudentProblemGradingRequest
     ): List<StudentProblemAnswerDto> {
         validateWorksheet(worksheetId)
         val problemIds = request.answers.map { it.problemId }.toList()
         validateProblems(problemIds)
         val problemAnswers = problemCorrectAnswerRepository.findByProblemIdIn(problemIds)
-        if (problemAnswers.isEmpty()) {
-            throw BadRequestException("문제에 대한 답안이 존재하지 않습니다")
-        }
+            .takeIf { it.isNotEmpty() }
+            ?: throw BadRequestException("문제에 대한 답안이 존재하지 않습니다")
 
-        val problemAnswerMap = HashMap<Long, Pair<String?, Long?>>()
-        problemAnswers.forEach { problemAnswer ->
-            problemAnswerMap[problemAnswer.id] = Pair(problemAnswer.answer, problemAnswer.selectionId)
-        }
+        val problemAnswerMap = problemAnswers.associate { it.id to (it.answer to it.selectionId) }
 
-        val userProblemAnswers = request.answers.map { gradingDto ->
-            val isCorrect = gradingDto.isCorrect(
-                if (gradingDto.isSubjective) {
-                    problemAnswerMap[gradingDto.problemId]?.first ?: ""
-                } else {
-                    problemAnswerMap[gradingDto.problemId]?.second.toString()
-                }
-            )
-
-            StudentProblemAnswerEntity.of(gradingDto, request.userId, isCorrect)
-        }
-
+        val userProblemAnswers = gradeAnswer(request, problemAnswerMap)
         val entities = studentProblemAnswerRepository.saveAll(userProblemAnswers)
         return entities.map { StudentProblemAnswerDto.from(it) }
+    }
+
+    private fun gradeAnswer(
+        request: StudentProblemGradingRequest,
+        problemAnswerMap: Map<Long, Pair<String?, Long?>>
+    ): List<StudentProblemAnswerEntity> {
+        return request.answers.map { gradingDto ->
+            val isCorrect = problemAnswerMap[gradingDto.problemId]?.let { (correctAnswer, correctSelectionId) ->
+                if (gradingDto.isSubjective) {
+                    checkSubjectiveAnswer(gradingDto, correctAnswer)
+                } else {
+                    checkSelectiveAnswer(gradingDto, correctSelectionId)
+                }
+            } ?: false
+            StudentProblemAnswerEntity.of(gradingDto, request.userId, isCorrect)
+        }
+    }
+
+    private fun checkSubjectiveAnswer(
+        gradingDto: StudentProblemAnswerRequest,
+        correctAnswer: String?
+    ): Boolean {
+        return correctAnswer?.let { StudentProblemSubjectiveAnswerDto.from(gradingDto).isCorrect(it) } ?: false
+    }
+
+    private fun checkSelectiveAnswer(
+        gradingDto: StudentProblemAnswerRequest,
+        correctSelectionId: Long?
+    ): Boolean {
+        return correctSelectionId?.let { StudentProblemSelectiveAnswerDto.from(gradingDto).isCorrect(it) } ?: false
     }
 
     private fun validateWorksheet(worksheetId: Long) {

@@ -14,9 +14,12 @@ import org.mapstruct.ReportingPolicy
 import org.mapstruct.factory.Mappers
 
 @Entity
-@Table(name = "worksheets", indexes = [
-    Index(name = "idx_user_id", columnList = "user_id")
-])
+@Table(
+    name = "worksheets",
+    indexes = [
+        Index(name = "idx_user_id", columnList = "user_id")
+    ]
+)
 class WorksheetEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

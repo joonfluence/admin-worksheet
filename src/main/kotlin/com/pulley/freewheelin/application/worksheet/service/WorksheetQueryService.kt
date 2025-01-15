@@ -4,6 +4,7 @@ import com.pulley.freewheelin.application.worksheet.dto.WorksheetAnalysisDto
 import com.pulley.freewheelin.application.worksheet.dto.WorksheetAnalysisStudentDto
 import com.pulley.freewheelin.application.worksheet.dto.WorksheetProblemDetailDto
 import com.pulley.freewheelin.application.worksheet.dto.WorksheetProblemDto
+import com.pulley.freewheelin.domain.entity.StudentProblemAnswerEntity
 import com.pulley.freewheelin.domain.repository.StudentProblemAnswerRepository
 import com.pulley.freewheelin.domain.repository.StudentWorksheetRepository
 import com.pulley.freewheelin.domain.repository.WorksheetProblemRepository
@@ -38,18 +39,21 @@ class WorksheetQueryService(
 
         val studentDtos = students.map { student ->
             val answers = studentAnswerUserMap[student.userId] ?: emptyList()
-            val correctAnswers = answers.count { it.isCorrect }
-            val accuracyRate = if (answers.isNotEmpty()) correctAnswers.toDouble() / answers.size else 0.0
+            val accuracyRate = calculateAccuracyRate(answers)
             WorksheetAnalysisStudentDto.of(student.userId, accuracyRate)
         }
 
         val problemAccuracyRates = problems.map { problem ->
             val answers = studentAnswerProblemMap[problem.id] ?: emptyList()
-            val correctAnswers = answers.count { it.isCorrect }
-            val accuracyRate = if (answers.isNotEmpty()) correctAnswers.toDouble() / answers.size else 0.0
+            val accuracyRate = calculateAccuracyRate(answers)
             WorksheetProblemDetailDto.of(problem.problemId, accuracyRate)
         }
 
         return WorksheetAnalysisDto.of(worksheetId, worksheet.title, studentDtos, problemAccuracyRates)
+    }
+
+    private fun calculateAccuracyRate(answers: List<StudentProblemAnswerEntity>): Double {
+        val correctAnswers = answers.count { it.isCorrect }
+        return if (answers.isNotEmpty()) correctAnswers.toDouble() / answers.size else 0.0
     }
 }

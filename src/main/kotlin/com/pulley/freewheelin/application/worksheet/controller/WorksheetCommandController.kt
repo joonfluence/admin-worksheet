@@ -1,6 +1,6 @@
 package com.pulley.freewheelin.application.worksheet.controller
 
-import com.pulley.freewheelin.application.worksheet.request.WorksheetCreateRequestDto
+import com.pulley.freewheelin.application.worksheet.request.WorksheetCreateRequest
 import com.pulley.freewheelin.application.worksheet.response.WorksheetResponse
 import com.pulley.freewheelin.application.worksheet.service.WorksheetCommandService
 import io.swagger.v3.oas.annotations.Operation
@@ -18,7 +18,7 @@ class WorksheetCommandController(
     @PostMapping
     @Operation(summary = "학습지 생성")
     fun saveWorksheet(
-        @RequestBody request: WorksheetCreateRequestDto,
+        @RequestBody request: WorksheetCreateRequest,
     ): ResponseEntity<WorksheetResponse> {
         val worksheet = worksheetCommandService.saveWorksheet(request)
         val response = WorksheetResponse.from(worksheet)

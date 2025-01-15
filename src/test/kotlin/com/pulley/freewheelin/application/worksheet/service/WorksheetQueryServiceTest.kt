@@ -4,8 +4,8 @@ import com.pulley.freewheelin.application.BaseJpaTest
 import com.pulley.freewheelin.application.worksheet.dto.StudentWorksheetDto
 import com.pulley.freewheelin.application.worksheet.dto.WorksheetAnalysisDto
 import com.pulley.freewheelin.application.worksheet.dto.WorksheetDto
-import com.pulley.freewheelin.application.worksheet.request.StudentProblemAnswerDto
-import com.pulley.freewheelin.application.worksheet.request.WorksheetCreateRequestDto
+import com.pulley.freewheelin.application.worksheet.request.StudentProblemAnswerRequest
+import com.pulley.freewheelin.application.worksheet.request.WorksheetCreateRequest
 import com.pulley.freewheelin.domain.entity.StudentProblemAnswerEntity
 import com.pulley.freewheelin.domain.entity.StudentWorksheetEntity
 import com.pulley.freewheelin.domain.entity.UserEntity
@@ -180,7 +180,7 @@ class WorksheetQueryServiceTest : BaseJpaTest() {
     }
 
     private fun createWorksheet(title: String, description: String, userId: Long): WorksheetEntity {
-        val requestDto = WorksheetCreateRequestDto(title = title, description = description, userId = userId)
+        val requestDto = WorksheetCreateRequest(title = title, description = description, userId = userId)
         val worksheet = WorksheetEntity.from(WorksheetDto.from(requestDto))
         return worksheetRepository.save(worksheet)
     }
@@ -198,7 +198,7 @@ class WorksheetQueryServiceTest : BaseJpaTest() {
 
     private fun createStudentAnswers(userId: Long, problems: List<WorksheetProblemEntity>) {
         val subjectiveAnswer = StudentProblemAnswerEntity.of(
-            dto = StudentProblemAnswerDto(
+            dto = StudentProblemAnswerRequest(
                 problemId = problems[0].id,
                 isSubjective = true,
                 answer = "Test Answer",
@@ -208,7 +208,7 @@ class WorksheetQueryServiceTest : BaseJpaTest() {
             isCorrect = true
         )
         val answer2 = StudentProblemAnswerEntity.of(
-            dto = StudentProblemAnswerDto(
+            dto = StudentProblemAnswerRequest(
                 problemId = problems[1].id,
                 isSubjective = false,
                 answer = null,

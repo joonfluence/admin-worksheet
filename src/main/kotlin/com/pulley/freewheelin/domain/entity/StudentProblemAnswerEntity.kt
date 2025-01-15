@@ -1,6 +1,6 @@
 package com.pulley.freewheelin.domain.entity
 
-import com.pulley.freewheelin.application.worksheet.request.StudentProblemAnswerDto
+import com.pulley.freewheelin.application.worksheet.request.StudentProblemAnswerRequest
 import com.pulley.freewheelin.domain.entity.base.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -41,7 +41,7 @@ class StudentProblemAnswerEntity(
 ) : BaseEntity() {
     companion object {
         fun of(
-            dto: StudentProblemAnswerDto,
+            dto: StudentProblemAnswerRequest,
             userId: Long,
             isCorrect: Boolean,
         ): StudentProblemAnswerEntity {

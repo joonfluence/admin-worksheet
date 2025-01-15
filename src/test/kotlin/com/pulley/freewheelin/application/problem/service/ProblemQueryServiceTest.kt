@@ -2,7 +2,7 @@ package com.pulley.freewheelin.application.problem.service
 
 import com.pulley.freewheelin.application.BaseJpaTest
 import com.pulley.freewheelin.application.problem.dto.ProblemDto
-import com.pulley.freewheelin.application.problem.dto.ProblemSearchDto
+import com.pulley.freewheelin.application.problem.request.ProblemSearchRequest
 import com.pulley.freewheelin.domain.entity.ProblemEntity
 import com.pulley.freewheelin.domain.enums.DifficultyLevel
 import com.pulley.freewheelin.domain.enums.ProblemType
@@ -39,7 +39,7 @@ class ProblemQueryServiceTest : BaseJpaTest() {
             val selectionCount = 1
             createProblems(unitCode, level, subjectiveCount, selectionCount)
 
-            val searchDto = ProblemSearchDto(
+            val searchDto = ProblemSearchRequest(
                 unitCodeList = unitCode.toString(),
                 level = DifficultyLevel.LOW,
                 problemType = ProblemType.SUBJECTIVE,
@@ -63,7 +63,7 @@ class ProblemQueryServiceTest : BaseJpaTest() {
             createProblems(unitCode, highLevel, subjectiveCount, selectionCount)
             createProblems(unitCode, midLevel, subjectiveCount, selectionCount)
 
-            val searchDto = ProblemSearchDto(
+            val searchDto = ProblemSearchRequest(
                 unitCodeList = unitCode.toString(),
                 level = DifficultyLevel.HIGH,
                 problemType = ProblemType.ALL,
@@ -94,7 +94,7 @@ class ProblemQueryServiceTest : BaseJpaTest() {
             createProblems(unitCode, highLevel, subjectiveCount, selectionCount)
             createProblems(unitCode, midLevel, subjectiveCount, selectionCount)
 
-            val searchDto = ProblemSearchDto(
+            val searchDto = ProblemSearchRequest(
                 unitCodeList = unitCode.toString(),
                 level = DifficultyLevel.MIDDLE,
                 problemType = ProblemType.ALL,
@@ -125,7 +125,7 @@ class ProblemQueryServiceTest : BaseJpaTest() {
             createProblems(unitCode, highLevel, subjectiveCount, selectionCount)
             createProblems(unitCode, midLevel, subjectiveCount, selectionCount)
 
-            val searchDto = ProblemSearchDto(
+            val searchDto = ProblemSearchRequest(
                 unitCodeList = unitCode.toString(),
                 level = DifficultyLevel.LOW,
                 problemType = ProblemType.ALL,

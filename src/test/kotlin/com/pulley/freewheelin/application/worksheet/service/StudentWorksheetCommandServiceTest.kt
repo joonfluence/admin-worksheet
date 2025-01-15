@@ -2,9 +2,9 @@ package com.pulley.freewheelin.application.worksheet.service
 
 import com.pulley.freewheelin.application.BaseJpaTest
 import com.pulley.freewheelin.application.students.service.StudentWorksheetCommandService
-import com.pulley.freewheelin.application.worksheet.request.StudentProblemAnswerDto
-import com.pulley.freewheelin.application.worksheet.request.StudentProblemGradingRequestDto
-import com.pulley.freewheelin.application.worksheet.request.StudentWorksheetCreateRequestDto
+import com.pulley.freewheelin.application.worksheet.request.StudentProblemAnswerRequest
+import com.pulley.freewheelin.application.worksheet.request.StudentProblemGradingRequest
+import com.pulley.freewheelin.application.worksheet.request.StudentWorksheetCreateRequest
 import com.pulley.freewheelin.domain.entity.ProblemCorrectAnswerEntity
 import com.pulley.freewheelin.domain.entity.ProblemEntity
 import com.pulley.freewheelin.domain.entity.WorksheetEntity
@@ -24,12 +24,16 @@ import kotlin.test.Test
 class StudentWorksheetCommandServiceTest : BaseJpaTest() {
     @Autowired
     private lateinit var problemCorrectAnswerRepository: ProblemCorrectAnswerRepository
+
     @Autowired
     private lateinit var studentProblemAnswerRepository: StudentProblemAnswerRepository
+
     @Autowired
     private lateinit var studentWorksheetRepository: StudentWorksheetRepository
+
     @Autowired
     private lateinit var problemRepository: ProblemRepository
+
     @Autowired
     private lateinit var worksheetRepository: WorksheetRepository
     private lateinit var studentWorksheetCommandService: StudentWorksheetCommandService
@@ -56,7 +60,7 @@ class StudentWorksheetCommandServiceTest : BaseJpaTest() {
                 userId = 1L,
             )
         )
-        val request = StudentWorksheetCreateRequestDto(
+        val request = StudentWorksheetCreateRequest(
             userIds = listOf(1L, 2L, 3L)
         )
 
@@ -78,32 +82,22 @@ class StudentWorksheetCommandServiceTest : BaseJpaTest() {
                 userId = 1L,
             )
         )
-        val request = StudentProblemGradingRequestDto(
-            userId = 1L,
-            answers = listOf(
-                StudentProblemAnswerDto(
-                    problemId = 1L,
-                    answer = "answer1",
-                    answerSelectionId = null,
-                    isSubjective = true,
-                ),
-                StudentProblemAnswerDto(
-                    problemId = 2L,
-                    answer = "answer2",
-                    answerSelectionId = null,
-                    isSubjective = true,
-                ),
-                StudentProblemAnswerDto(
-                    problemId = 3L,
-                    answer = "answer3",
-                    answerSelectionId = null,
-                    isSubjective = true,
-                ),
-            )
-        )
+
         val problems = createProblems(UnitCode.UC1503, 1, 3, 0)
-        val problemIds = problems.map { it?.id ?: 0 }
+        val problemIds = problems.map { it.id }
         createCorrectAnswers(problemIds, true)
+        val request = StudentProblemGradingRequest(
+            userId = 1L,
+            answers =
+            problemIds.map {
+                StudentProblemAnswerRequest(
+                    problemId = it,
+                    answer = "answer$it",
+                    answerSelectionId = null,
+                    isSubjective = true,
+                )
+            }
+        )
 
         // When
         val result = studentWorksheetCommandService.gradeUserWorksheet(worksheetEntity.id, request)
@@ -123,32 +117,22 @@ class StudentWorksheetCommandServiceTest : BaseJpaTest() {
                 userId = 1L,
             )
         )
-        val request = StudentProblemGradingRequestDto(
-            userId = 1L,
-            answers = listOf(
-                StudentProblemAnswerDto(
-                    problemId = 4L,
-                    answer = null,
-                    answerSelectionId = 1L,
-                    isSubjective = false,
-                ),
-                StudentProblemAnswerDto(
-                    problemId = 5L,
-                    answer = null,
-                    answerSelectionId = 2L,
-                    isSubjective = false,
-                ),
-                StudentProblemAnswerDto(
-                    problemId = 6L,
-                    answer = null,
-                    answerSelectionId = 3L,
-                    isSubjective = false,
-                ),
-            )
-        )
+
         val problems = createProblems(UnitCode.UC1503, 1, 0, 3)
-        val problemIds = problems.map { it?.id ?: 0 }
+        val problemIds = problems.map { it.id }
         createCorrectAnswers(problemIds, false)
+        val request = StudentProblemGradingRequest(
+            userId = 1L,
+            answers =
+            problemIds.map {
+                StudentProblemAnswerRequest(
+                    problemId = it,
+                    answer = null,
+                    answerSelectionId = it,
+                    isSubjective = false,
+                )
+            }
+        )
 
         // When
         val result = studentWorksheetCommandService.gradeUserWorksheet(worksheetEntity.id, request)
@@ -181,7 +165,12 @@ class StudentWorksheetCommandServiceTest : BaseJpaTest() {
         }
     }
 
-    fun createProblems(unitCode: UnitCode, level: Int, subjectiveCount: Int, selectionCount: Int): List<ProblemEntity?> {
+    fun createProblems(
+        unitCode: UnitCode,
+        level: Int,
+        subjectiveCount: Int,
+        selectionCount: Int
+    ): List<ProblemEntity> {
         val problems = mutableListOf<ProblemEntity>()
 
         repeat(subjectiveCount) {

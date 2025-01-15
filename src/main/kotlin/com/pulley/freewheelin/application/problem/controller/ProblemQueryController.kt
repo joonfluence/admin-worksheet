@@ -1,6 +1,6 @@
 package com.pulley.freewheelin.application.problem.controller
 
-import com.pulley.freewheelin.application.problem.dto.ProblemSearchDto
+import com.pulley.freewheelin.application.problem.request.ProblemSearchRequest
 import com.pulley.freewheelin.application.problem.response.ProblemResponse
 import com.pulley.freewheelin.application.problem.service.ProblemQueryService
 import io.swagger.v3.oas.annotations.Operation
@@ -17,9 +17,9 @@ class ProblemQueryController(private val problemQueryService: ProblemQueryServic
     @Operation(summary = "문제 목록 조회")
     @GetMapping
     fun findAllProblems(
-        dto: ProblemSearchDto
+        request: ProblemSearchRequest
     ): ResponseEntity<PageImpl<ProblemResponse>> {
-        val problems = problemQueryService.findAllProblems(dto)
+        val problems = problemQueryService.findAllProblems(request)
         val responses = problems.content.map { ProblemResponse.from(it) }
         return ResponseEntity.ok(
             PageImpl(responses)

@@ -1,8 +1,8 @@
 package com.pulley.freewheelin.application.students.controller
 
 import com.pulley.freewheelin.application.students.service.StudentWorksheetCommandService
-import com.pulley.freewheelin.application.worksheet.request.StudentProblemGradingRequestDto
-import com.pulley.freewheelin.application.worksheet.request.StudentWorksheetCreateRequestDto
+import com.pulley.freewheelin.application.worksheet.request.StudentProblemGradingRequest
+import com.pulley.freewheelin.application.worksheet.request.StudentWorksheetCreateRequest
 import com.pulley.freewheelin.application.worksheet.response.StudentProblemAnswerResponse
 import com.pulley.freewheelin.application.worksheet.response.StudentWorksheetResponse
 import io.swagger.v3.oas.annotations.Operation
@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/v1/users/worksheets")
-class StudentWorksheetCommandController(private val userWorksheetCommandService: StudentWorksheetCommandService) {
-
+class StudentWorksheetCommandController(
+    private val userWorksheetCommandService: StudentWorksheetCommandService
+) {
     @Operation(summary = "유저 학습지 출제")
     @PostMapping("/{worksheetId}")
     fun saveUserWorksheet(
         @PathVariable worksheetId: Long,
-        @RequestBody request: StudentWorksheetCreateRequestDto,
+        @RequestBody request: StudentWorksheetCreateRequest,
     ): ResponseEntity<List<StudentWorksheetResponse>> {
         val worksheets = userWorksheetCommandService.saveUserWorksheet(worksheetId, request)
         val responses = worksheets.map { StudentWorksheetResponse.from(it) }
@@ -33,7 +34,7 @@ class StudentWorksheetCommandController(private val userWorksheetCommandService:
     @PutMapping("/{worksheetId}/problems/grade")
     fun gradeUserWorksheet(
         @PathVariable worksheetId: Long,
-        @RequestBody request: StudentProblemGradingRequestDto,
+        @RequestBody request: StudentProblemGradingRequest,
     ): ResponseEntity<List<StudentProblemAnswerResponse>> {
         val problems = userWorksheetCommandService.gradeUserWorksheet(worksheetId, request)
         val responses = problems.map { StudentProblemAnswerResponse.from(it) }

@@ -3,7 +3,7 @@ package com.pulley.freewheelin.application.worksheet.request
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
 
-data class WorksheetCreateRequestDto(
+data class WorksheetCreateRequest(
     @field:NotBlank(message = "제목은 필수 값입니다.")
     @Schema(description = "제목")
     val title: String,
@@ -13,8 +13,8 @@ data class WorksheetCreateRequestDto(
     val userId: Long,
 ) {
     companion object {
-        fun of(title: String, description: String?, userId: Long): WorksheetCreateRequestDto {
-            return WorksheetCreateRequestDto(title, description, userId)
+        fun of(title: String, description: String?, userId: Long): WorksheetCreateRequest {
+            return WorksheetCreateRequest(title, description, userId)
         }
     }
 }

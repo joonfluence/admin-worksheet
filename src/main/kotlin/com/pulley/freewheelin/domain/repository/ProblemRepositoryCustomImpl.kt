@@ -5,7 +5,6 @@ import com.pulley.freewheelin.domain.entity.ProblemEntity
 import com.pulley.freewheelin.domain.entity.QProblemEntity
 import com.pulley.freewheelin.domain.enums.DifficultyLevel
 import com.pulley.freewheelin.domain.enums.ProblemType
-import com.pulley.freewheelin.domain.enums.UnitCode
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
@@ -13,9 +12,8 @@ class ProblemRepositoryCustomImpl : ProblemRepositoryCustom, QuerydslRepositoryS
     val problem = QProblemEntity.problemEntity
 
     override fun searchAllProblemsByDto(dto: ProblemSearchDto): PageImpl<ProblemEntity> {
-        val unitCodes = dto.unitCodeList.split(",").map { UnitCode.valueOf(it.trim()) }
         val query = from(QProblemEntity.problemEntity)
-            .where(problem.unitCode.`in`(unitCodes))
+            .where(problem.unitCode.`in`(dto.unitCodes))
 
         if (dto.problemType != ProblemType.ALL) {
             query.where(problem.type.eq(dto.problemType))

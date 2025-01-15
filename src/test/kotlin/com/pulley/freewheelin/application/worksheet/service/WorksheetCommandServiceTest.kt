@@ -1,7 +1,7 @@
 package com.pulley.freewheelin.application.worksheet.service
 
 import com.pulley.freewheelin.application.BaseJpaTest
-import com.pulley.freewheelin.application.worksheet.request.WorksheetCreateRequestDto
+import com.pulley.freewheelin.application.worksheet.request.WorksheetCreateRequest
 import com.pulley.freewheelin.domain.repository.WorksheetRepository
 import org.junit.jupiter.api.DisplayName
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,7 +24,7 @@ class WorksheetCommandServiceTest : BaseJpaTest() {
     fun test() {
         // given & when
         val worksheet = worksheetCommandService.saveWorksheet(
-            WorksheetCreateRequestDto(
+            WorksheetCreateRequest(
                 title = "title",
                 description = "description",
                 userId = 1L,

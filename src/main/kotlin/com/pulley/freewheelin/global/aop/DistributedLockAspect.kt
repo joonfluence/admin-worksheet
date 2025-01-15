@@ -25,7 +25,7 @@ class DistributedLockAspect(private val redissonClient: RedissonClient) {
             val parameterNames = methodSignature.parameterNames
             val keyParamIndex = parameterNames.indexOf(distributedLock.keyParameter)
             if (keyParamIndex != -1) {
-                "${distributedLock.lockKey}:${args[keyParamIndex]}"
+                "${distributedLock.lockKey}:${distributedLock.keyParameter}:${args[keyParamIndex]}"
             } else {
                 distributedLock.lockKey
             }

@@ -25,7 +25,7 @@ class StudentWorksheetCommandController(
         @PathVariable worksheetId: Long,
         @RequestBody request: StudentWorksheetCreateRequest,
     ): ResponseEntity<List<StudentWorksheetResponse>> {
-        val worksheets = userWorksheetCommandService.saveUserWorksheet(worksheetId, request)
+        val worksheets = userWorksheetCommandService.saveUserWorksheet(worksheetId, request.userIds)
         val responses = worksheets.map { StudentWorksheetResponse.from(it) }
         return ResponseEntity.ok(responses)
     }
@@ -36,7 +36,7 @@ class StudentWorksheetCommandController(
         @PathVariable worksheetId: Long,
         @RequestBody request: StudentProblemGradingRequest,
     ): ResponseEntity<List<StudentProblemAnswerResponse>> {
-        val problems = userWorksheetCommandService.gradeUserWorksheet(worksheetId, request)
+        val problems = userWorksheetCommandService.gradeUserWorksheet(worksheetId, request.userId, request.answers)
         val responses = problems.map { StudentProblemAnswerResponse.from(it) }
         return ResponseEntity.ok(responses)
     }

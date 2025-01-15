@@ -3,10 +3,8 @@ package com.pulley.freewheelin.application.students.service
 import com.pulley.freewheelin.application.worksheet.dto.StudentProblemAnswerDto
 import com.pulley.freewheelin.application.worksheet.dto.StudentWorksheetDto
 import com.pulley.freewheelin.application.worksheet.request.StudentProblemAnswerRequest
-import com.pulley.freewheelin.application.worksheet.request.StudentProblemGradingRequest
 import com.pulley.freewheelin.application.worksheet.request.StudentProblemSelectiveAnswerDto
 import com.pulley.freewheelin.application.worksheet.request.StudentProblemSubjectiveAnswerDto
-import com.pulley.freewheelin.application.worksheet.request.StudentWorksheetCreateRequest
 import com.pulley.freewheelin.domain.entity.StudentProblemAnswerEntity
 import com.pulley.freewheelin.domain.entity.StudentWorksheetEntity
 import com.pulley.freewheelin.domain.repository.ProblemCorrectAnswerRepository
@@ -28,26 +26,27 @@ class StudentWorksheetCommandService(
     private val problemRepository: ProblemRepository,
     private val worksheetRepository: WorksheetRepository,
 ) {
-
     @DistributedLock(lockKey = "save_user_worksheet", keyParameter = "worksheetId")
     fun saveUserWorksheet(
         worksheetId: Long,
-        request: StudentWorksheetCreateRequest
+        userIds: List<Long>,
     ): List<StudentWorksheetDto> {
         validateWorksheet(worksheetId)
-        val dtos = request.userIds.map { StudentWorksheetDto.from(it, worksheetId) }
+        validateUserWorksheets(userIds)
+        val dtos = userIds.map { StudentWorksheetDto.from(it, worksheetId) }
         val worksheets = dtos.map { StudentWorksheetEntity.from(it) }
         val worksheet = studentWorksheetRepository.saveAll(worksheets)
         return worksheet.map { StudentWorksheetDto.fromEntity(it) }
     }
 
-    @DistributedLock(lockKey = "grade_user_worksheet", keyParameter = "worksheetId")
+    @DistributedLock(lockKey = "grade_user_worksheet", keyParameter = "userId")
     fun gradeUserWorksheet(
         worksheetId: Long,
-        request: StudentProblemGradingRequest
+        userId: Long,
+        answers: List<StudentProblemAnswerRequest>,
     ): List<StudentProblemAnswerDto> {
         validateWorksheet(worksheetId)
-        val problemIds = request.answers.map { it.problemId }.toList()
+        val problemIds = answers.map { it.problemId }.toList()
         validateProblems(problemIds)
         val problemAnswers = problemCorrectAnswerRepository.findByProblemIdIn(problemIds)
             .takeIf { it.isNotEmpty() }
@@ -55,16 +54,17 @@ class StudentWorksheetCommandService(
 
         val problemAnswerMap = problemAnswers.associate { it.id to (it.answer to it.selectionId) }
 
-        val userProblemAnswers = gradeAnswer(request, problemAnswerMap)
+        val userProblemAnswers = gradeAnswer(userId, answers, problemAnswerMap)
         val entities = studentProblemAnswerRepository.saveAll(userProblemAnswers)
         return entities.map { StudentProblemAnswerDto.from(it) }
     }
 
     private fun gradeAnswer(
-        request: StudentProblemGradingRequest,
+        userId: Long,
+        answers: List<StudentProblemAnswerRequest>,
         problemAnswerMap: Map<Long, Pair<String?, Long?>>
     ): List<StudentProblemAnswerEntity> {
-        return request.answers.map { gradingDto ->
+        return answers.map { gradingDto ->
             val isCorrect = problemAnswerMap[gradingDto.problemId]?.let { (correctAnswer, correctSelectionId) ->
                 if (gradingDto.isSubjective) {
                     checkSubjectiveAnswer(gradingDto, correctAnswer)
@@ -72,7 +72,7 @@ class StudentWorksheetCommandService(
                     checkSelectiveAnswer(gradingDto, correctSelectionId)
                 }
             } ?: false
-            StudentProblemAnswerEntity.of(gradingDto, request.userId, isCorrect)
+            StudentProblemAnswerEntity.of(gradingDto, userId, isCorrect)
         }
     }
 
@@ -99,6 +99,13 @@ class StudentWorksheetCommandService(
         val entities = problemRepository.findByIdIn(problemIds)
         if (entities.size != problemIds.size) {
             throw BadRequestException("존재하지 않은 문제들이 포함되어 있습니다.")
+        }
+    }
+
+    private fun validateUserWorksheets(userIds: List<Long>) {
+        val entities = studentWorksheetRepository.findByUserIdIn(userIds)
+        if (entities.isNotEmpty()) {
+            throw BadRequestException("이미 학습지를 제출한 사용자가 포함되어 있습니다.")
         }
     }
 }

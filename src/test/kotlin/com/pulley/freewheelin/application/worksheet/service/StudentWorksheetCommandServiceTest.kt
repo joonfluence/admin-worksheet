@@ -65,7 +65,7 @@ class StudentWorksheetCommandServiceTest : BaseJpaTest() {
         )
 
         // When
-        val result = studentWorksheetCommandService.saveUserWorksheet(worksheetEntity.id, request)
+        val result = studentWorksheetCommandService.saveUserWorksheet(worksheetEntity.id, request.userIds)
 
         // Then
         assertEquals(3, result.size)
@@ -100,7 +100,7 @@ class StudentWorksheetCommandServiceTest : BaseJpaTest() {
         )
 
         // When
-        val result = studentWorksheetCommandService.gradeUserWorksheet(worksheetEntity.id, request)
+        val result = studentWorksheetCommandService.gradeUserWorksheet(worksheetEntity.id, request.userId, request.answers)
 
         // Then
         assertEquals(3, result.size)
@@ -135,7 +135,7 @@ class StudentWorksheetCommandServiceTest : BaseJpaTest() {
         )
 
         // When
-        val result = studentWorksheetCommandService.gradeUserWorksheet(worksheetEntity.id, request)
+        val result = studentWorksheetCommandService.gradeUserWorksheet(worksheetEntity.id, request.userId, request.answers)
 
         // Then
         assertEquals(3, result.size)

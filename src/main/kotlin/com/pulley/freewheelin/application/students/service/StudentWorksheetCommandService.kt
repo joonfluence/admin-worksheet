@@ -11,6 +11,7 @@ import com.pulley.freewheelin.domain.repository.ProblemRepository
 import com.pulley.freewheelin.domain.repository.StudentProblemAnswerRepository
 import com.pulley.freewheelin.domain.repository.StudentWorksheetRepository
 import com.pulley.freewheelin.domain.repository.WorksheetRepository
+import com.pulley.freewheelin.global.annotation.DistributedLock
 import com.pulley.freewheelin.global.exception.BadRequestException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -25,6 +26,7 @@ class StudentWorksheetCommandService(
     private val worksheetRepository: WorksheetRepository,
 ) {
 
+    @DistributedLock(lockKey = "save_user_worksheet", keyParameter = "worksheetId")
     fun saveUserWorksheet(worksheetId: Long, request: StudentWorksheetCreateRequestDto): List<StudentWorksheetDto> {
         validateWorksheet(worksheetId)
         val dtos = request.userIds.map { StudentWorksheetDto.from(it, worksheetId) }
@@ -33,6 +35,7 @@ class StudentWorksheetCommandService(
         return worksheet.map { StudentWorksheetDto.fromEntity(it) }
     }
 
+    @DistributedLock(lockKey = "grade_user_worksheet", keyParameter = "worksheetId")
     fun gradeUserWorksheet(
         worksheetId: Long,
         request: StudentProblemGradingRequestDto
